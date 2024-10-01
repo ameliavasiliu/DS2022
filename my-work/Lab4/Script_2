@@ -1,0 +1,32 @@
+#!/home/codespace/.python/current/bin/python
+
+import requests
+
+import boto3
+
+from botocore.exceptions import NoCredentialsError
+
+GIF_URL = "https://media.tenor.com/-qBsG1HwR4oAAAAM/cat-dance-dancing-cat.gif"
+
+Bucket = "ds2022-ega9cw"
+
+Expire = 604800
+
+response = requests.get(GIF_URL)
+with open('cat.gif', 'wb') as file:
+    file.write(response.content)
+
+s3 = boto3.client('s3')
+try:
+    s3.upload_file('cat.gif', Bucket, 'cat.gif')
+    presigned_url = s3.generate_presigned_url(
+        'get_object',
+        Params={'Bucket': Bucket, 'Key': 'cat.gif'},
+        ExpiresIn=Expire
+    )
+    print('Presigned URL:', presigned_url)
+except NoCredentialsError:
+    print('Credentials not available')
+except Exception as e:
+    print('Error:', e)
+

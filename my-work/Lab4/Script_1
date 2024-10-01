@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cat="https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
+
+curl $cat > cat.jpg
+
+aws s3 cp cat.jpg s3://ds2022-ega9cw/
+
+aws s3 presign --expires-in 604800 s3://ds2022-ega9cw/cat.jpg
+
+https://ds2022-ega9cw.s3.amazonaws.com/cat.jpg?AWSAccessKeyId=AKIATNVEVTA65H66IF7X&Signature=%2BkrnJXPyNAnX94uS8ACw7ds8fsM%3D&Expires=172833810
+
+
